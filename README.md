@@ -1,5 +1,10 @@
 # zabbix-api
-zabbix-api for java
+Fork of zabbix-api for java.
+Planed changes:
+- java level down to 6
+- down Zabbix version to 2.2
+- potential rework to use jaxon JSON parser and serializer for minifiing dependencies
+
 
 https://www.zabbix.com/wiki/doc/api
 
