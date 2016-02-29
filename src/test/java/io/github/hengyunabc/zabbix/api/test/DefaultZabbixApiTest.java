@@ -5,30 +5,68 @@ import io.github.hengyunabc.zabbix.api.Request;
 import io.github.hengyunabc.zabbix.api.RequestBuilder;
 import io.github.hengyunabc.zabbix.api.ZabbixApi;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Properties;
+
+@RunWith(Parameterized.class)
 public class DefaultZabbixApiTest {
 
 	private ZabbixApi zabbixApi;
+	private String user_login;
+	private String user_password;
+	private Properties params;
 
-	@Before
-	public void before() {
-		String url = "http://localhost:49156/zabbix/api_jsonrpc.php";
-
-		url = "http://192.168.90.102/zabbix/api_jsonrpc.php";
-
+	public DefaultZabbixApiTest(String url, String login, String password, Properties p){
 		zabbixApi = new DefaultZabbixApi(url);
 		zabbixApi.init();
+		user_login = login;
+		user_password = password;
+		params = p;
 	}
 
-	@After
-	public void after() {
+
+	@Override
+	protected void finalize() throws Throwable {
 		zabbixApi.destroy();
+		super.finalize();
+	}
+
+	@Parameterized.Parameters
+	public static Collection<Object[]> data() {
+
+		Properties p = new Properties();
+		InputStream prStream = null;
+		try {
+			prStream = DefaultZabbixApiTest.class.getResourceAsStream("zabbix.local.properties");
+			p.load(prStream);
+		} catch (Exception e){
+			// We haven't such file use project defaults
+			// e.printStackTrace();
+		}finally {
+			if (prStream != null)
+				try {
+					prStream.close();
+				} catch (IOException e) {
+					// nothing required
+				}
+		}
+		Collection<Object[]> al = new ArrayList<Object[]>();
+		al.add(new Object[]{
+				p.getProperty("url", "http://localhost:49156/zabbix/api_jsonrpc.php"),
+				p.getProperty("login", "admin"),
+				p.getProperty("password", "zabbix"),
+				p });
+		return  al;
 	}
 
 	@Test
@@ -39,8 +77,8 @@ public class DefaultZabbixApiTest {
 
 	@Test
 	public void testLogin() {
-		String user = "admin";
-		String password = "zabbix";
+		String user = user_login;
+		String password = user_password;
 		boolean login = zabbixApi.login(user, password);
 		System.out.println("login result:" + login);
 
@@ -54,10 +92,10 @@ public class DefaultZabbixApiTest {
 
 	@Test
 	public void testHostGet() {
-		boolean login = zabbixApi.login("zabbix.dev", "goK0Loqua4Eipoe");
+		boolean login = zabbixApi.login(user_login, user_password);
 		System.err.println("login:" + login);
 
-		String host = "192.168.66.29";
+		String host = params.getProperty("testHostGet.host", "192.168.0.1");
 		JSONObject filter = new JSONObject();
 
 		filter.put("host", new String[] { host });
@@ -70,13 +108,13 @@ public class DefaultZabbixApiTest {
 		System.err.println(hostid);
 	}
 
-	@Test
+	//@Test
 	public void testItemCreate() {
-		boolean login = zabbixApi.login("zabbix.dev", "goK0Loqua4Eipoe");
+		boolean login = zabbixApi.login(user_login, user_password);
 		System.err.println("login:" + login);
 		String name = "testItem";
 		String key = name;
-		String hostid = "10180";
+		String hostid = params.getProperty("testItemCreate.hostid", "1");
 		int type = 2; // trapper
 		int value_type = 0; // float
 		int delay = 30;
@@ -99,11 +137,12 @@ public class DefaultZabbixApiTest {
 
 	@Test
 	public void testGetTrigger() {
-		boolean login = zabbixApi.login("zabbix.dev", "goK0Loqua4Eipoe");
+		boolean login = zabbixApi.login(user_login, user_password);
 		System.err.println("login:" + login);
+		String triggerId = params.getProperty("testGetTrigger.triggerId", "2322");
 
 		Request request = RequestBuilder.newBuilder().method("trigger.get")
-				.paramEntry("triggerids", 2322).paramEntry("output", "extend")
+				.paramEntry("triggerids", triggerId).paramEntry("output", "extend")
 				.paramEntry("selectFunctions", "extend").build();
 
 		System.err.println(JSON.toJSONString(request));

@@ -1,0 +1,11 @@
+# Example properties file
+# For use rename to zabbix.local.properties
+# Login and connect params
+url=http://192.168.0.1/zabbix/api_jsonrpc.php
+login=admin
+password=zabbix
+
+# params for test cases in form caseName.paramName
+testHostGet.host=192.168.0.1
+testItemCreate.hostid=1
+testGetTrigger.triggerId=1

@@ -1,0 +1,2 @@
+# ignore local file with properties for Zabbix connect
+zabbix.local.properties
