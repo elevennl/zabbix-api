@@ -1,22 +1,18 @@
-package io.github.hengyunabc.zabbix.api.test;
+package io.github.cgi.zabbix.api.test;
 
-import io.github.hengyunabc.zabbix.api.DefaultZabbixApi;
-import io.github.hengyunabc.zabbix.api.Request;
-import io.github.hengyunabc.zabbix.api.RequestBuilder;
-import io.github.hengyunabc.zabbix.api.ZabbixApi;
+import io.github.cgi.zabbix.api.*;
 
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.SerializationConfig;
 import org.junit.Test;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Properties;
+import java.util.*;
 
 @RunWith(Parameterized.class)
 public class DefaultZabbixApiTest {
@@ -85,8 +81,8 @@ public class DefaultZabbixApiTest {
 		if (login) {
 			Request request = RequestBuilder.newBuilder().method("user.get")
 					.paramEntry("output", "extend").build();
-			JSONObject response = zabbixApi.call(request);
-			System.err.println(JSON.toJSONString(response, true));
+			JsonNode response = zabbixApi.call(request);
+			System.err.println(Utils.toJsonWithIndent(response));
 		}
 	}
 
@@ -96,15 +92,14 @@ public class DefaultZabbixApiTest {
 		System.err.println("login:" + login);
 
 		String host = params.getProperty("testHostGet.host", "192.168.0.1");
-		JSONObject filter = new JSONObject();
+		Map filter = new HashMap();
 
 		filter.put("host", new String[] { host });
 		Request getRequest = RequestBuilder.newBuilder().method("host.get")
 				.paramEntry("filter", filter).build();
-		JSONObject getResponse = zabbixApi.call(getRequest);
+		JsonNode getResponse = zabbixApi.call(getRequest);
 		System.err.println(getResponse);
-		String hostid = getResponse.getJSONArray("result").getJSONObject(0)
-				.getString("hostid");
+		String hostid = getResponse.path("result").path(0).path("hostid").getTextValue();
 		System.err.println(hostid);
 	}
 
@@ -128,11 +123,11 @@ public class DefaultZabbixApiTest {
 				.paramEntry("delay", delay)
 				.paramEntry("interfaceid", interfaceid).build();
 
-		System.err.println(JSON.toJSONString(request));
+		System.err.println(Utils.toJsonWithIndent(request));
 
-		JSONObject result = zabbixApi.call(request);
+		JsonNode result = zabbixApi.call(request);
 
-		System.err.println(JSON.toJSONString(result, true));
+		System.err.println(Utils.toJsonWithIndent(result));
 	}
 
 	@Test
@@ -145,10 +140,10 @@ public class DefaultZabbixApiTest {
 				.paramEntry("triggerids", triggerId).paramEntry("output", "extend")
 				.paramEntry("selectFunctions", "extend").build();
 
-		System.err.println(JSON.toJSONString(request));
+		System.err.println(Utils.toJsonWithIndent(request));
 
-		JSONObject result = zabbixApi.call(request);
+		JsonNode result = zabbixApi.call(request);
 
-		System.err.println(JSON.toJSONString(result, true));
+		System.err.println(Utils.toJsonWithIndent(result));
 	}
 }

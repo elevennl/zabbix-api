@@ -1,9 +1,14 @@
 # zabbix-api
 Fork of zabbix-api for java.
 Planed changes:
-- java level down to 6
-- down Zabbix version to 2.2
-- potential rework to use jaxon JSON parser and serializer for minifiing dependencies
+- java level down to 6 - Done
+- down Zabbix version to 2.2 - Done
+- potential rework to use jaxon JSON parser and serializer for minifiing dependencies - done. 
+- down httpclient version - done
+- rework of tests for support local params for Zabbix connections.
+
+
+As this project became incompatible with original group id for artefact was changed.
 
 
 https://www.zabbix.com/wiki/doc/api
@@ -77,6 +82,15 @@ You can set your own ```HttpClient```.
 		System.out.println("api version:" + apiVersion);
 		
 		zabbixApi.destory();
+```
+
+You can add dependency to MAven project:
+```XML
+        <dependency>
+            <groupId>io.github.cgi</groupId>
+            <artifactId>zabbix-api</artifactId>
+            <version>0.0.2-SNAPSHOT</version>
+        </dependency>
 ```
 
 ##Licence

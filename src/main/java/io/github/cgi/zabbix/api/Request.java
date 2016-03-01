@@ -1,9 +1,9 @@
-package io.github.hengyunabc.zabbix.api;
+package io.github.cgi.zabbix.api;
+
+import org.codehaus.jackson.map.ObjectMapper;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import com.alibaba.fastjson.JSON;
 
 public class Request {
 	private String jsonrpc = "2.0";
@@ -66,6 +66,6 @@ public class Request {
 
 	@Override
 	public String toString() {
-		return JSON.toJSONString(this);
+		return Utils.toJson(this);
 	}
 }

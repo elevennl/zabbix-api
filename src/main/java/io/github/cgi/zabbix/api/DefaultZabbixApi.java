@@ -1,31 +1,33 @@
-package io.github.hengyunabc.zabbix.api;
+package io.github.cgi.zabbix.api;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
 import org.apache.http.HttpEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.node.ArrayNode;
+import org.codehaus.jackson.node.ObjectNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 
 public class DefaultZabbixApi implements ZabbixApi {
 	private static final Logger logger = LoggerFactory.getLogger(DefaultZabbixApi.class);
 
-	private CloseableHttpClient httpClient;
+	private HttpClient httpClient;
 
 	private URI uri;
 
 	private String auth;
+
+	ObjectMapper mapper = new ObjectMapper();
 
 	public DefaultZabbixApi(String url) {
 		try {
@@ -39,12 +41,12 @@ public class DefaultZabbixApi implements ZabbixApi {
 		this.uri = uri;
 	}
 
-	public DefaultZabbixApi(String url, CloseableHttpClient httpClient) {
+	public DefaultZabbixApi(String url, HttpClient httpClient) {
 		this(url);
 		this.httpClient = httpClient;
 	}
 
-	public DefaultZabbixApi(URI uri, CloseableHttpClient httpClient) {
+	public DefaultZabbixApi(URI uri, HttpClient httpClient) {
 		this(uri);
 		this.httpClient = httpClient;
 	}
@@ -52,18 +54,14 @@ public class DefaultZabbixApi implements ZabbixApi {
 	@Override
 	public void init() {
 		if (httpClient == null) {
-			httpClient = HttpClients.custom().build();
+			httpClient = new DefaultHttpClient();
 		}
 	}
 
 	@Override
 	public void destroy() {
 		if (httpClient != null) {
-			try {
-				httpClient.close();
-			} catch (Exception e) {
-				logger.error("close httpclient error!", e);
-			}
+			httpClient = null;
 		}
 	}
 
@@ -71,8 +69,8 @@ public class DefaultZabbixApi implements ZabbixApi {
 	public boolean login(String user, String password) {
 		Request request = RequestBuilder.newBuilder().paramEntry("user", user)
 				.paramEntry("password", password).method("user.login").build();
-		JSONObject response = call(request);
-		String auth = response.getString("result");
+		JsonNode response = call(request);
+		String auth = response.path("result").getTextValue();
 		if (auth != null && !auth.isEmpty()) {
 			this.auth = auth;
 			return true;
@@ -84,34 +82,34 @@ public class DefaultZabbixApi implements ZabbixApi {
 	public String apiVersion() {
 		Request request = RequestBuilder.newBuilder().method("apiinfo.version")
 				.build();
-		JSONObject response = call(request);
-		return response.getString("result");
+		JsonNode response = call(request);
+		return response.path("result").getTextValue();
 	}
 
 	public boolean hostExists(String name) {
 		Request request = RequestBuilder.newBuilder().method("host.exists")
 				.paramEntry("name", name).build();
-		JSONObject response = call(request);
-		return response.getBooleanValue("result");
+		JsonNode response = call(request);
+		return response.path("result").getBooleanValue();
 	}
 
 	public String hostCreate(String host, String groupId) {
-		JSONArray groups = new JSONArray();
-		JSONObject group = new JSONObject();
+		ArrayNode groups = mapper.createArrayNode();
+		ObjectNode group = mapper.createObjectNode();
+
 		group.put("groupid", groupId);
 		groups.add(group);
 		Request request = RequestBuilder.newBuilder().method("host.create")
 				.paramEntry("host", host).paramEntry("groups", groups).build();
-		JSONObject response = call(request);
-		return response.getJSONObject("result").getJSONArray("hostids")
-				.getString(0);
+		JsonNode response = call(request);
+		return response.path("result").path("hostids").path(0).getTextValue();
 	}
 
 	public boolean hostgroupExists(String name) {
 		Request request = RequestBuilder.newBuilder()
 				.method("hostgroup.exists").paramEntry("name", name).build();
-		JSONObject response = call(request);
-		return response.getBooleanValue("result");
+		JsonNode response = call(request);
+		return response.path("result").getBooleanValue();
 	}
 
 	/**
@@ -122,27 +120,24 @@ public class DefaultZabbixApi implements ZabbixApi {
 	public String hostgroupCreate(String name) {
 		Request request = RequestBuilder.newBuilder()
 				.method("hostgroup.create").paramEntry("name", name).build();
-		JSONObject response = call(request);
-		return response.getJSONObject("result").getJSONArray("groupids")
-				.getString(0);
+		JsonNode response = call(request);
+		return response.get("result").get("groupids").get(0).getTextValue();
 	}
 
 	@Override
-	public JSONObject call(Request request) {
+	public JsonNode call(Request request) {
 		if (request.getAuth() == null) {
 			request.setAuth(auth);
 		}
 
 		try {
-			HttpUriRequest httpRequest = org.apache.http.client.methods.RequestBuilder
-					.post().setUri(uri)
-					.addHeader("Content-Type", "application/json")
-					.setEntity(new StringEntity(JSON.toJSONString(request)))
-					.build();
-			CloseableHttpResponse response = httpClient.execute(httpRequest);
+			HttpPost httpRequest = new HttpPost(uri);
+			String requestStr = mapper.writeValueAsString(request);
+			httpRequest.addHeader("Content-Type", "application/json");
+			httpRequest.setEntity(new StringEntity(requestStr));
+			HttpResponse response = httpClient.execute(httpRequest);
 			HttpEntity entity = response.getEntity();
-			byte[] data = EntityUtils.toByteArray(entity);
-			return (JSONObject) JSON.parse(data);
+			return mapper.readTree(entity.getContent()) ;
 		} catch (IOException e) {
 			throw new RuntimeException("DefaultZabbixApi call exception!", e);
 		}

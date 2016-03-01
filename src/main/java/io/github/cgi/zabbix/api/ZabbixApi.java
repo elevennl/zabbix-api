@@ -1,6 +1,6 @@
-package io.github.hengyunabc.zabbix.api;
+package io.github.cgi.zabbix.api;
 
-import com.alibaba.fastjson.JSONObject;
+import org.codehaus.jackson.JsonNode;
 
 public interface ZabbixApi {
 
@@ -10,7 +10,7 @@ public interface ZabbixApi {
 
 	String apiVersion();
 
-	JSONObject call(Request request);
+	JsonNode call(Request request);
 
 	boolean login(String user, String password);
 }
