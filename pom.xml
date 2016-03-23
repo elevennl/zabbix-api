@@ -4,20 +4,47 @@
 	<artifactId>zabbix-api</artifactId>
 	<version>0.0.2-SNAPSHOT</version>
 
+	<name>Zabbix API Client for Java</name>
+	<description>
+		This is simple Zabbix API Client for Java.
+		It's fork of original client https://github.com/hengyunabc/zabbix-api
+		but with small changes in java version, dependencies, api contract, tests.
+	</description>
+	<url>https://github.com/cgi/zabbix-api</url>
+
+	<licenses>
+		<license>
+			<name>The Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<name>Ilya Ermolin</name>
+			<email>ermolinis@gmail.com</email>
+			<organization>individual</organization>
+			<organizationUrl>https://github.com/cgi</organizationUrl>
+		</developer>
+	</developers>
+
+	<scm>
+		<connection>scm:git:git@github.com:cgi/zabbix-api.git</connection>
+		<developerConnection>scm:git:git@github.com:cgi/zabbix-api.git</developerConnection>
+		<url>git@github.com:cgi/zabbix-api.git</url>
+	</scm>
+
 	<properties>
 		<maven.compiler.target>1.6</maven.compiler.target>
 		<maven.compiler.source>1.6</maven.compiler.source>
 		<java.version>1.6</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-
 		<!-- Logging -->
 		<logback.version>1.0.13</logback.version>
 		<slf4j.version>1.7.5</slf4j.version>
-
 		<!-- Test -->
 		<junit.version>4.11</junit.version>
-
 	</properties>
 
 	<dependencies>
