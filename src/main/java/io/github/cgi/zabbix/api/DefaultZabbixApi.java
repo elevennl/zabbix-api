@@ -8,6 +8,7 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.codehaus.jackson.JsonNode;
@@ -67,6 +68,7 @@ public class DefaultZabbixApi implements ZabbixApi {
 
 	@Override
 	public boolean login(String user, String password) {
+		this.auth=null;
 		Request request = RequestBuilder.newBuilder().paramEntry("user", user)
 				.paramEntry("password", password).method("user.login").build();
 		JsonNode response = call(request);
@@ -127,14 +129,14 @@ public class DefaultZabbixApi implements ZabbixApi {
 	@Override
 	public JsonNode call(Request request) {
 		if (request.getAuth() == null) {
-			request.setAuth(auth);
+			request.setAuth(this.auth);
 		}
 
 		try {
 			HttpPost httpRequest = new HttpPost(uri);
 			String requestStr = mapper.writeValueAsString(request);
 			httpRequest.addHeader("Content-Type", "application/json");
-			httpRequest.setEntity(new StringEntity(requestStr));
+			httpRequest.setEntity(new StringEntity(requestStr, ContentType.APPLICATION_JSON));
 			HttpResponse response = httpClient.execute(httpRequest);
 			HttpEntity entity = response.getEntity();
 			return mapper.readTree(entity.getContent()) ;
