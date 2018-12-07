@@ -1,9 +1,8 @@
 package io.github.cgi.zabbix.api;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -132,6 +131,7 @@ public class DefaultZabbixApi implements ZabbixApi {
 			request.setAuth(this.auth);
 		}
 
+		byte[] byteArray = null;
 		try {
 			HttpPost httpRequest = new HttpPost(uri);
 			String requestStr = mapper.writeValueAsString(request);
@@ -139,9 +139,13 @@ public class DefaultZabbixApi implements ZabbixApi {
 			httpRequest.setEntity(new StringEntity(requestStr, ContentType.APPLICATION_JSON));
 			HttpResponse response = httpClient.execute(httpRequest);
 			HttpEntity entity = response.getEntity();
-			return mapper.readTree(entity.getContent()) ;
+
+			byteArray = Utils.getBytesFromInputStream(entity.getContent());
+			InputStream inputStream = new ByteArrayInputStream(byteArray);
+
+			return mapper.readTree(inputStream);
 		} catch (IOException e) {
-			throw new RuntimeException("DefaultZabbixApi call exception!", e);
+			throw new RuntimeException("DefaultZabbixApi call exception! " + Utils.inputStreamToString(byteArray) + ", ", e);
 		}
 	}
 
