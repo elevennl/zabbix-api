@@ -12,5 +12,7 @@ public interface ZabbixApi {
 
 	JsonNode call(Request request);
 
+	JsonNode call(Request request, boolean needAuth );
+
 	boolean login(String user, String password);
 }

@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>io.github.cgi</groupId>
 	<artifactId>zabbix-api</artifactId>
-	<version>0.0.3</version>
+	<version>0.0.4</version>
 
 	<name>Zabbix API Client for Java</name>
 	<description>

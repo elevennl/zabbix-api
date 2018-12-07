@@ -70,7 +70,7 @@ public class DefaultZabbixApi implements ZabbixApi {
 		this.auth=null;
 		Request request = RequestBuilder.newBuilder().paramEntry("user", user)
 				.paramEntry("password", password).method("user.login").build();
-		JsonNode response = call(request);
+		JsonNode response = call(request, false);
 		String auth = response.path("result").getTextValue();
 		if (auth != null && !auth.isEmpty()) {
 			this.auth = auth;
@@ -83,7 +83,7 @@ public class DefaultZabbixApi implements ZabbixApi {
 	public String apiVersion() {
 		Request request = RequestBuilder.newBuilder().method("apiinfo.version")
 				.build();
-		JsonNode response = call(request);
+		JsonNode response = call(request, false);
 		return response.path("result").getTextValue();
 	}
 
@@ -126,8 +126,12 @@ public class DefaultZabbixApi implements ZabbixApi {
 	}
 
 	@Override
-	public JsonNode call(Request request) {
-		if (request.getAuth() == null) {
+	public JsonNode call(Request request){
+		return call( request, true );
+	}
+
+	public JsonNode call(Request request, boolean needAuth) {
+		if (needAuth && request.getAuth() == null) {
 			request.setAuth(this.auth);
 		}
 
