@@ -149,7 +149,11 @@ public class DefaultZabbixApi implements ZabbixApi {
 
 			return mapper.readTree(inputStream);
 		} catch (IOException e) {
-			throw new RuntimeException("DefaultZabbixApi call exception! " + Utils.inputStreamToString(byteArray) + ", ", e);
+			if(byteArray == null ) {
+				throw new RuntimeException("DefaultZabbixApi call exception! empty response, ", e);
+			}else {
+				throw new RuntimeException("DefaultZabbixApi call exception! " + Utils.inputStreamToString(byteArray) + ", ", e);
+			}
 		}
 	}
 

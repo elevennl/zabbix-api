@@ -1,6 +1,5 @@
 package io.github.cgi.zabbix.api;
 
-import org.apache.commons.io.IOUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.SerializationConfig;
 
