@@ -10,10 +10,10 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.node.ArrayNode;
-import org.codehaus.jackson.node.ObjectNode;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,7 +71,7 @@ public class DefaultZabbixApi implements ZabbixApi {
 		Request request = RequestBuilder.newBuilder().paramEntry("user", user)
 				.paramEntry("password", password).method("user.login").build();
 		JsonNode response = call(request, false);
-		String auth = response.path("result").getTextValue();
+		String auth = response.path("result").textValue();
 		if (auth != null && !auth.isEmpty()) {
 			this.auth = auth;
 			return true;
@@ -84,14 +84,14 @@ public class DefaultZabbixApi implements ZabbixApi {
 		Request request = RequestBuilder.newBuilder().method("apiinfo.version")
 				.build();
 		JsonNode response = call(request, false);
-		return response.path("result").getTextValue();
+		return response.path("result").textValue();
 	}
 
 	public boolean hostExists(String name) {
 		Request request = RequestBuilder.newBuilder().method("host.exists")
 				.paramEntry("name", name).build();
 		JsonNode response = call(request);
-		return response.path("result").getBooleanValue();
+		return response.path("result").booleanValue();
 	}
 
 	public String hostCreate(String host, String groupId) {
@@ -103,14 +103,14 @@ public class DefaultZabbixApi implements ZabbixApi {
 		Request request = RequestBuilder.newBuilder().method("host.create")
 				.paramEntry("host", host).paramEntry("groups", groups).build();
 		JsonNode response = call(request);
-		return response.path("result").path("hostids").path(0).getTextValue();
+		return response.path("result").path("hostids").path(0).textValue();
 	}
 
 	public boolean hostgroupExists(String name) {
 		Request request = RequestBuilder.newBuilder()
 				.method("hostgroup.exists").paramEntry("name", name).build();
 		JsonNode response = call(request);
-		return response.path("result").getBooleanValue();
+		return response.path("result").booleanValue();
 	}
 
 	/**
@@ -122,7 +122,7 @@ public class DefaultZabbixApi implements ZabbixApi {
 		Request request = RequestBuilder.newBuilder()
 				.method("hostgroup.create").paramEntry("name", name).build();
 		JsonNode response = call(request);
-		return response.get("result").get("groupids").get(0).getTextValue();
+		return response.get("result").get("groupids").get(0).textValue();
 	}
 
 	@Override

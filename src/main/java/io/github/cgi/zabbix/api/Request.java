@@ -1,7 +1,5 @@
 package io.github.cgi.zabbix.api;
 
-import org.codehaus.jackson.map.ObjectMapper;
-
 import java.util.HashMap;
 import java.util.Map;
 

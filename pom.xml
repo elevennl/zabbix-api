@@ -2,13 +2,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>io.github.cgi</groupId>
 	<artifactId>zabbix-api</artifactId>
-	<version>0.0.5</version>
+	<version>0.0.6</version>
 
 	<name>Zabbix API Client for Java</name>
 	<description>
 		This is simple Zabbix API Client for Java.
 		It's fork of original client https://github.com/hengyunabc/zabbix-api
-		but with small changes in java version, dependencies, api contract, tests.
+		but with small changes in java version, dependencies, api contract, tests and some dependency versions.
 	</description>
 	<url>https://github.com/cgi/zabbix-api</url>
 
@@ -19,21 +19,6 @@
 		</license>
 	</licenses>
 
-	<developers>
-		<developer>
-			<name>Ilya Ermolin</name>
-			<email>ermolinis@gmail.com</email>
-			<organization>individual</organization>
-			<organizationUrl>https://github.com/cgi</organizationUrl>
-		</developer>
-	</developers>
-
-	<scm>
-		<connection>scm:git:git@github.com:cgi/zabbix-api.git</connection>
-		<developerConnection>scm:git:git@github.com:cgi/zabbix-api.git</developerConnection>
-		<url>git@github.com:cgi/zabbix-api.git</url>
-	</scm>
-
 	<distributionManagement>
 		<snapshotRepository>
 			<id>ossrh</id>
@@ -42,9 +27,9 @@
 	</distributionManagement>
 
 	<properties>
-		<maven.compiler.target>1.6</maven.compiler.target>
-		<maven.compiler.source>1.6</maven.compiler.source>
-		<java.version>1.7</java.version>
+		<maven.compiler.target>11</maven.compiler.target>
+		<maven.compiler.source>11</maven.compiler.source>
+		<java.version>11</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<!-- Logging -->
@@ -55,13 +40,11 @@
 	</properties>
 
 	<dependencies>
-
 		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-mapper-asl</artifactId>
-			<version>1.6.4</version>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.13.4</version>
 		</dependency>
-
 
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
@@ -71,6 +54,10 @@
 				<exclusion>
 					<groupId>commons-logging</groupId>
 					<artifactId>commons-logging</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>commons-codec</groupId>
+					<artifactId>commons-codec</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
