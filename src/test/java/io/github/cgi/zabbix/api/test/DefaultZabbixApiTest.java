@@ -2,9 +2,7 @@ package io.github.cgi.zabbix.api.test;
 
 import io.github.cgi.zabbix.api.*;
 
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.SerializationConfig;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.Test;
 
 import org.junit.runner.RunWith;
@@ -82,7 +80,7 @@ public class DefaultZabbixApiTest {
             Request request = RequestBuilder.newBuilder().method("user.get")
                     .paramEntry("output", "extend").build();
             JsonNode response = zabbixApi.call(request);
-            System.err.println(Utils.toJsonWithIndent(response));
+            System.err.println(Utils.toJson(response));
         }
     }
 
@@ -99,7 +97,7 @@ public class DefaultZabbixApiTest {
                 .paramEntry("filter", filter).build();
         JsonNode getResponse = zabbixApi.call(getRequest);
         System.err.println(getResponse);
-        String hostid = getResponse.path("result").path(0).path("hostid").getTextValue();
+        String hostid = getResponse.path("result").path(0).path("hostid").textValue();
         System.err.println(hostid);
     }
 
@@ -123,11 +121,11 @@ public class DefaultZabbixApiTest {
                 .paramEntry("delay", delay)
                 .paramEntry("interfaceid", interfaceid).build();
 
-        System.err.println(Utils.toJsonWithIndent(request));
+        System.err.println(Utils.toJson(request));
 
         JsonNode result = zabbixApi.call(request);
 
-        System.err.println(Utils.toJsonWithIndent(result));
+        System.err.println(Utils.toJson(result));
     }
 
     @Test
@@ -140,11 +138,11 @@ public class DefaultZabbixApiTest {
                 .paramEntry("triggerids", triggerId).paramEntry("output", "extend")
                 .paramEntry("selectFunctions", "extend").build();
 
-        System.err.println(Utils.toJsonWithIndent(request));
+        System.err.println(Utils.toJson(request));
 
         JsonNode result = zabbixApi.call(request);
 
-        System.err.println(Utils.toJsonWithIndent(result));
+        System.err.println(Utils.toJson(result));
     }
 
     @Test
@@ -165,11 +163,11 @@ public class DefaultZabbixApiTest {
                 .paramEntry("time_from", timestamp)
                 .build();
 
-        System.err.println(Utils.toJsonWithIndent(request));
+        System.err.println(Utils.toJson(request));
 
         JsonNode result = zabbixApi.call(request);
 
-        System.err.println(Utils.toJsonWithIndent(result));
+        System.err.println(Utils.toJson(result));
     }
 
     @Test
@@ -190,11 +188,11 @@ public class DefaultZabbixApiTest {
 //                .paramEntry("time_from", timestamp)
                 .build();
 
-        System.err.println(Utils.toJsonWithIndent(request));
+        System.err.println(Utils.toJson(request));
 
         JsonNode result = zabbixApi.call(request);
 
-        System.err.println(Utils.toJsonWithIndent(result));
+        System.err.println(Utils.toJson(result));
     }
 
 }
