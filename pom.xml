@@ -20,9 +20,15 @@
 	</licenses>
 
 	<distributionManagement>
+		<repository>
+			<id>nexus</id>
+			<name>Eleven Nexus</name>
+			<url>http://nexus.eleven.nl/content/repositories/releases</url>
+		</repository>
 		<snapshotRepository>
-			<id>ossrh</id>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+			<id>nexus</id>
+			<name>Eleven Nexus</name>
+			<url>http://nexus.eleven.nl/content/repositories/snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
 
