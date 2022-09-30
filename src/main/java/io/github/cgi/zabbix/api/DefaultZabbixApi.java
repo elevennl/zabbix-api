@@ -3,6 +3,8 @@ package io.github.cgi.zabbix.api;
 import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -152,7 +154,7 @@ public class DefaultZabbixApi implements ZabbixApi {
 			if(byteArray == null ) {
 				throw new RuntimeException("DefaultZabbixApi call exception! empty response, ", e);
 			}else {
-				throw new RuntimeException("DefaultZabbixApi call exception! " + Utils.inputStreamToString(byteArray) + ", ", e);
+				throw new RuntimeException("DefaultZabbixApi call exception! " + new String(byteArray, StandardCharsets.UTF_8) + ", ", e);
 			}
 		}
 	}

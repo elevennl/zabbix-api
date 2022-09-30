@@ -2,10 +2,8 @@ package io.github.cgi.zabbix.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 
 /**
  * Created by cgi on 01.03.2016.
@@ -25,18 +23,6 @@ public class Utils {
 			e.printStackTrace();
 			return new byte[0];
 		}
-	}
-
-	public static String inputStreamToString(byte[] bytes) {
-		String string = null;
-		try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
-			outputStream.write(bytes);
-			string = outputStream.toString(StandardCharsets.UTF_8);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		return string;
 	}
 
 	public static String toJson(Object o) {
