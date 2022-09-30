@@ -1,4 +1,4 @@
-package io.github.cgi.zabbix.api;
+package io.github.elevennl.zabbix.api;
 
 import com.fasterxml.jackson.databind.JsonNode;
 

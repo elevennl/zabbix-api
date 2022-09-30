@@ -1,4 +1,4 @@
-package io.github.cgi.zabbix.api.test;
+package io.github.elevennl.zabbix.api.test;
 
 
 public class HttpClientConfigExample{
