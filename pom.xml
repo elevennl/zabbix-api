@@ -1,6 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>io.github.cgi</groupId>
+	<groupId>io.github.elevennl</groupId>
 	<artifactId>zabbix-api</artifactId>
 	<version>0.0.6</version>
 
@@ -8,7 +8,7 @@
 	<description>
 		This is simple Zabbix API Client for Java.
 		It's fork of original client https://github.com/hengyunabc/zabbix-api
-		but with small changes in java version, dependencies, api contract, tests and some dependency versions.
+		but with small changes in java version, api contract, tests and some dependency versions.
 	</description>
 	<url>https://github.com/cgi/zabbix-api</url>
 
