@@ -36,20 +36,22 @@
 		<logback.version>1.2.9</logback.version>
 		<slf4j.version>1.7.5</slf4j.version>
 		<!-- Test -->
-		<junit.version>4.13.1</junit.version>
+		<junit.version>4.13.2</junit.version>
+		<jackson-databind.version>2.13.4</jackson-databind.version>
+		<httpclient.version>4.5.13</httpclient.version>
 	</properties>
 
 	<dependencies>
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
-			<version>2.13.4</version>
+			<version>${jackson-databind.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
-			<version>4.5.13</version>
+			<version>${httpclient.version}</version>
 			<exclusions>
 				<exclusion>
 					<groupId>commons-logging</groupId>
