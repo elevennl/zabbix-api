@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Created by cgi on 01.03.2016.
@@ -13,37 +14,24 @@ import java.io.InputStream;
 public class Utils {
 	static ObjectMapper mapper = new ObjectMapper();
 
+	private Utils() {
+		throw new UnsupportedOperationException("Do not instantiate this utility.");
+	}
+
 	public static byte[] getBytesFromInputStream(InputStream inputStream) {
-
-		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-
 		try {
-			byte[] buffer = new byte[1024];
-			int length;
-
-			while ((length = inputStream.read(buffer)) != -1) {
-				outputStream.write(buffer, 0, length);
-			}
-
-			outputStream.flush();
-
+			return inputStream.readAllBytes();
 		} catch (IOException e) {
 			e.printStackTrace();
+			return new byte[0];
 		}
-
-		return outputStream.toByteArray();
 	}
 
 	public static String inputStreamToString(byte[] bytes) {
-
-		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		String string = null;
-
-		try {
-
+		try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
 			outputStream.write(bytes);
-			string = outputStream.toString("UTF-8");
-
+			string = outputStream.toString(StandardCharsets.UTF_8);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
