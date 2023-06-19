@@ -68,7 +68,8 @@ public class DefaultZabbixApi implements ZabbixApi {
     @Override
     public boolean login(String user, String password) {
         this.auth = null;
-        Request request = RequestBuilder.newBuilder().paramEntry("user", user)
+
+        Request request = RequestBuilder.newBuilder().paramEntry("username", user)
                 .paramEntry("password", password).method("user.login").build();
         JsonNode response = call(request, false);
         String auth = response.path("result").textValue();
