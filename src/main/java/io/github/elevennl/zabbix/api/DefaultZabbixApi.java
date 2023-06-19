@@ -72,7 +72,7 @@ public class DefaultZabbixApi implements ZabbixApi {
         Request request = RequestBuilder.newBuilder().paramEntry("username", user)
                 .paramEntry("password", password).method("user.login").build();
         JsonNode response = call(request, false);
-        String auth = response.path("result").textValue();
+        String auth = response.findValue("result").textValue();
         if (auth != null && !auth.isEmpty()) {
             this.auth = auth;
             return true;
