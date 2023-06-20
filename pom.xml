@@ -47,6 +47,11 @@
 		<httpclient.version>4.5.13</httpclient.version>
 	</properties>
 
+	<scm>
+		<connection>scm:git:ssh://git@github.com:elevennl/zabbix-api.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com:elevennl/zabbix-api.git</developerConnection>
+	</scm>
+
 	<dependencies>
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
