@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>io.github.elevennl</groupId>
 	<artifactId>zabbix-api</artifactId>
-	<version>0.0.8</version>
+	<version>0.0.9-SNAPSHOT</version>
 
 	<name>Zabbix API Client for Java</name>
 	<description>
@@ -50,7 +50,7 @@
 	<scm>
 		<connection>scm:git:ssh://git@github.com/elevennl/zabbix-api.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/elevennl/zabbix-api.git</developerConnection>
-	  <tag>zabbix-api-0.0.8</tag>
+	  <tag>HEAD</tag>
   </scm>
 
 	<dependencies>
