@@ -48,8 +48,8 @@
 	</properties>
 
 	<scm>
-		<connection>scm:git:ssh://git@github.com:elevennl/zabbix-api.git</connection>
-		<developerConnection>scm:git:ssh://git@github.com:elevennl/zabbix-api.git</developerConnection>
+		<connection>scm:git:ssh://git@github.com/elevennl/zabbix-api.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com/elevennl/zabbix-api.git</developerConnection>
 	</scm>
 
 	<dependencies>
